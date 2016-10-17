@@ -6,7 +6,12 @@
 #include <stdlib.h>
 #include <string.h>
 
+//file
 FILE * file;
+
+//variables used for the string to bit bang through a GPIO pin and read in the RX pin
+int i;
+char *ToPrint;
 
 //paths to the gpio direction and value
 	char direction_path[100] = "";

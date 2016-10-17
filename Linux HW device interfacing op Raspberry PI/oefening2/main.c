@@ -1,42 +1,47 @@
-#include <stdio.h>
-#include <stdlib.h>
+//----------------------------------
+// oefening2 : main.h
+//----------------------------------
 
+#include "main.h"
+
+//Defines the GPIO# here, once, rather than at every occurence in the program.
+#define RPI_PIN "17"
 
 int main(void)
 {
-    int val;
-    val=1;
-
-    FILE * file;
-
-    file = fopen("/sys/class/gpio/gpio17/direction", "w");
-    fprintf(file, "%s", "out");
-    fclose(file);
-    file = fopen("/sys/class/gpio/gpio17/value", "w");
-
+    wave_state=1;
+    file=setPin(file, RPI_PIN, "out");
 
     while(1)
     {
-        if (val==0)
-        {
-            controlLed(file, val);
-            val=1;
-        }
-        else if(val==1)
-        {
-            controlLed(file, val);
-            val=0;
-        }
+        //bitwise XOR operation to toggle wave_state;
+        wave_state ^= 1;
+        fprintf(file, "%d", wave_state);
+        fflush(file);
     }
 
     return 0;
 }
 
-void controlLed(FILE *file, int val)
+FILE* setPin(FILE * file, char *pinNum, char *inOut)
 {
-    fprintf(file, "%d", val);
-    fflush(file);
+    //paths to the gpio direction and value
+    char direction_path[50] = "";
+    char value_path[50] = "";
 
+    //concatenate the defined pin number with the path to both the direction and value
+    snprintf(direction_path, sizeof(direction_path), "/sys/class/gpio/gpio%s/direction", pinNum);
+    snprintf(value_path, sizeof(value_path), "/sys/class/gpio/gpio%s/value", pinNum);
+
+    file = fopen(direction_path, "w");
+    fprintf(file, "%s", inOut);
+    fclose(file);
+
+    file = fopen(value_path, "w");
+#ifdef debug
+    printf("Direction path: %s\nValue path: %s\n",direction_path,value_path);
+#endif
+    return file;
 }
 
 
