@@ -66,6 +66,13 @@ void MicroDelay(long delay_us)
             // Take the roll over into consideration, so we can properly have
             // µs delays of up to 1 second. We do this by adding a second as soon
             // as a rollover is detected.
+
+        	/*
+        	 * Omdat de limiet om te tellen maar op 999999999 ligt zal er dus bij 99..99 een rolover gebeuren
+        	 * en om de correcte tijd te kunnen wachten moet men dus 1 seconde (1000000000) erbij moeten tellen
+        	 * omdat de teller terug naar 0 gaat!
+        	 *
+        	 */
             t_diff += 1000000000;
 		#ifdef debug
 		printf("%ld\n", t_diff);
