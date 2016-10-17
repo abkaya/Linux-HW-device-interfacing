@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <time.h>
 
-// for 9600 baud the period is 104 microseconds want 1/9600 = 1,04*10^-4
-// for other baud rates, just adjust the period
+// for 9600 baud the period is 104 microseconds. 1/9600 = 1,04*10^-4
+// for other baud rates, adjust the period accordingly
 #define period 104
 
 
