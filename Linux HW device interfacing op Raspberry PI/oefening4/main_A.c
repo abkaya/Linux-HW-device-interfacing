@@ -67,7 +67,10 @@ void MicroDelay(long delay_us)
             // µs delays of up to 1 second. We do this by adding a second as soon
             // as a rollover is detected.
             t_diff += 1000000000;
-			printf("%ld\n",t_diff);
+		#ifdef debug
+		printf("%ld\n", t_diff);
+		#endif
+        if (t_diff > delay_us * 1000)
             break;
     }
 }
@@ -75,15 +78,20 @@ void MicroDelay(long delay_us)
 //bron: https://saeedsolutions.blogspot.be/2012/07/pic12f675-software-uart-bit-banging.html
 void uart_TX(const char data, FILE * file)
 {
-    //start bit
+    //start bit 0b0
     fprintf(file, "%d", 0);
     fflush(file);
     MicroDelay(delay_bit);
 
     for (unsigned char i = 0; i < 8; i ++)
     {
-        //set pin according to the data value (in binary value)
-        //start with LSB
+        //This operation bangs the least significant bit out to the GPIO pin.
+		//This is how it works: 
+		//Imagine dat character 'A' = 10000001. 
+		// 1. We shift it by 0, it's original state.
+		// 2. then we comparing the least significant bit (0x01 = 0b00000001) with the data (bitwise &)
+		// 		2.1 if it is 1, bang out a value 1, else bang out a value 0.
+		// This we do from bit 0 to bit 7, having successfully banged out the entire byte worth of character.
         if ((data>>i)& 0x01)
         {
             fprintf(file, "%d", 1);
@@ -97,7 +105,7 @@ void uart_TX(const char data, FILE * file)
         MicroDelay(delay_bit);
     }
 
-    //stop bit
+    //stop bit 0b1
     fprintf(file, "%d", 1);
     fflush(file);
     MicroDelay(delay_bit);

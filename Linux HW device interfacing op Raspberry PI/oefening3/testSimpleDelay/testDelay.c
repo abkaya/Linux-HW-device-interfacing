@@ -6,13 +6,13 @@
 
 int main(void)
 {
-	MicroDelay(104);
+    MicroDelay(700000);
 
-	return 0;
+    return 0;
 }
 
 void MicroDelay(long delay_us)
-{	
+{
     // Getting the clock time, with option CLOCK_REALTIME
     // Assign a start time in nanoseconds
     clock_gettime(CLOCK_REALTIME, &t_now);
@@ -25,7 +25,8 @@ void MicroDelay(long delay_us)
             // µs delays of up to 1 second. We do this by adding a second as soon
             // as a rollover is detected.
             t_diff += 1000000000;
-			printf("%ld\n",t_diff);
+        printf("%ld\n", t_diff);
+        if (t_diff > delay_us * 1000)
             break;
     }
 }

@@ -4,6 +4,7 @@
 #include "main.h"
 
 #define RPI_PIN "17"
+//#define debug
 
 int main(void)
 {
@@ -60,7 +61,10 @@ void MicroDelay(long delay_us)
             // µs delays of up to 1 second. We do this by adding a second as soon
             // as a rollover is detected.
             t_diff += 1000000000;
-			printf("%ld\n",t_diff);
+		#ifdef debug
+		printf("%ld\n", t_diff);
+		#endif
+        if (t_diff > delay_us * 1000)
             break;
     }
 }
