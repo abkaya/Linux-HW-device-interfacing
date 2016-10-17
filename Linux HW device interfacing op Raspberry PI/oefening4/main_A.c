@@ -78,7 +78,7 @@ void uart_TX(const char data, FILE * file)
     //start bit
     fprintf(file, "%d", 0);
     fflush(file);
-    nanosleep();
+    MicroDelay(delay_bit);
 
     for (unsigned char i = 0; i < 8; i ++)
     {
@@ -94,13 +94,13 @@ void uart_TX(const char data, FILE * file)
             fprintf(file, "%d", 0);
             fflush(file);
         }
-        nanosleep();
+        MicroDelay(delay_bit);
     }
 
     //stop bit
     fprintf(file, "%d", 1);
     fflush(file);
-    nanosleep();
+    MicroDelay(delay_bit);
 }
 
 
