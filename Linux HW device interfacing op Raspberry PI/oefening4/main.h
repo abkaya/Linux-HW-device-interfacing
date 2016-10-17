@@ -6,6 +6,12 @@
 #include <stdlib.h>
 #include <string.h>
 
+FILE * file;
+
+//paths to the gpio direction and value
+	char direction_path[100] = "";
+	char value_path[100] = "";
+
 //baud rate control variables
 long delay_bit;
 
@@ -26,6 +32,10 @@ void MicroDelay(long delay_us);
  * \param pinNum : pin number, defined for the C preprocessor
  * \param inOut : used to set GPIO pin "in" or "out"
 */
-void setPin(FILE * file, char *pinNum, char *inOut);
+FILE* setPin(FILE * file, char *pinNum, char *inOut);
+
+void uart_TX(const char data, FILE * file);
+
+
 
 #endif
